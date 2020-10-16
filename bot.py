@@ -1,5 +1,6 @@
 import discord
 import random
+import os
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix='.')
