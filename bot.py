@@ -1,5 +1,6 @@
 import discord
 import random
+import os
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix='.')
@@ -26,6 +27,6 @@ async def quotes(ctx):
     response = random.choice(John_quotes)
     await ctx.send(response)
 
-
+#to update git add . git commit -m "updating"  git push
 
 bot.run(os.environ['DISCORD_TOKEN'])
