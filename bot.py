@@ -27,6 +27,6 @@ async def quotes(ctx):
     response = random.choice(John_quotes)
     await ctx.send(response)
 
-
+#to update do git add . then git commit -m "message" then git push
 
 bot.run(os.environ['DISCORD_TOKEN'])
