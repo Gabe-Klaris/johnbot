@@ -24,7 +24,7 @@ async def quotes(ctx):
     "What does that mean? tic tac?",
     "If you're doing loops and texts again, i will not be happy.",
     "Yeah I intentionally reformatted all these computers just to destory your golf program.",
-    "The funny thing I learned to write code by hand.",
+    "The funny thing is I learned to write code by hand.",
 
     ]
     response = random.choice(John_quotes)
