@@ -22,11 +22,14 @@ async def quotes(ctx):
     "Making a text based rpg is kind of simple for you at this point.",
     "I would only consider teaching advanced physics if it were an emergency.",
     "What does that mean? tic tac?",
-    "If you're doing loops and texts again, i will not be happy."
+    "If you're doing loops and texts again, i will not be happy.",
+    "Yeah I intentionally reformatted all these computers just to destory your golf program.",
+    "The funny thing I learned to write code by hand.",
+
     ]
     response = random.choice(John_quotes)
     await ctx.send(response)
 
-#to update git add . git commit -m "updating"  git push
+#to update do git add . then git commit -m "message" then git push
 
 bot.run(os.environ['DISCORD_TOKEN'])
