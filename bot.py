@@ -3,7 +3,13 @@ import random
 import os
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix='.')
+bot = commands.Bot(command_prefix='.', description = "Hi :)")
+
+@bot.event
+async def on_ready():
+    game = discord.Game("Colossal Cave adventure")
+    await client.change_presence(status=discord.Status.idle, activity=game)
+
 
             
 @bot.command(name='quote',help = 'gives John quote')
