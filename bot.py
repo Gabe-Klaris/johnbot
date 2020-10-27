@@ -7,8 +7,8 @@ bot = commands.Bot(command_prefix='.', description = "Hi :)")
 
 @bot.event
 async def on_ready():
-    game = discord.Game("Colossal Cave adventure")
-    await client.change_presence(status=discord.Status.idle, activity=game)
+    await bot.change_presence(activity=discord.Game(name="Colossal Cave Adventure"))
+
 
 
             
