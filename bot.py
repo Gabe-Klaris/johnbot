@@ -28,11 +28,11 @@ async def quotes(ctx):
     "Making a text based rpg is kind of simple for you at this point.",
     "I would only consider teaching advanced physics if it were an emergency.",
     "What does that mean? tic tac?",
-    "If you're doing loops and texts again, i will not be happy.",
+    "If you're doing loops and texts again, I will not be happy.",
     "Yeah I intentionally reformatted all these computers just to destory your golf program.",
     "The funny thing is I learned to write code by hand.",
     "Like maybe it's like really really trouble.",
-    "I wonder if you can maybe like make the bottom layer disapear once in a while"
+    "I wonder if you can maybe like make the bottom layer disapear once in a while",
     "It has a little picture of a (hand motion). Have fun."
 
     ]
