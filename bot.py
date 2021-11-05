@@ -35,7 +35,7 @@ async def quotes(ctx):
     "I wonder if you can maybe like make the bottom layer disapear once in a while",
     "It has a little picture of a (hand motion). Have fun.",
     "Hey it's the string I've been looking for",
-    "Are you doing to poison you computer science teacher so I can sub?"
+    "Are you going to poison you computer science teacher so I can sub?"
 
     ]
     response = random.choice(John_quotes)
