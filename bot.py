@@ -41,6 +41,14 @@ async def quotes(ctx):
     response = random.choice(John_quotes)
     await ctx.send(response)
 
+@bot.command(name='schedule',help = 'coming soon to a John bot near you')
+async def quotes(ctx,arg):
+    username = str(ctx.message.author.id)
+    if username == "243481871915155468":
+        response = arg
+    else:
+        response = "no"
+    await ctx.send(response)
 #to update do git add . then git commit -m "message" then git push
 
 bot.run(os.environ['DISCORD_TOKEN'])
