@@ -43,7 +43,7 @@ async def quotes(ctx):
 @bot.command(name='schedule',help = 'coming soon to a John bot near you')
 async def quotes(ctx,arg):
     username = str(ctx.message.author.id)
-    if username == os.environ['DISCORD_TOKEN']:
+    if username == os.environ['DISCORD_ID']:
         response = arg
     else:
         response = "no"
