@@ -4,7 +4,6 @@ import discord
 import random
 import os
 from discord.ext import commands
-
 import datetime
 import os.path
 
@@ -179,8 +178,8 @@ async def quotes(ctx,arg):
                         if sorted_events[i] != sorted_events[i+1]:
                             free = "You have free time from " + datetime.datetime.strftime(sorted_events[i] ,"%I:%M") + "-" + datetime.datetime.strftime(sorted_events[i+1] ,"%I:%M") + "\n"
                             response += str(free)
-                last_class = "and your last class ends at " + datetime.datetime.strftime(sorted_events[-1] ,"%I:%M") + "\n"
-                response += str(last_class)
+                    last_class = "and your last class ends at " + datetime.datetime.strftime(sorted_events[-1] ,"%I:%M") + "\n"
+                    response += str(last_class)
                 for event in events2:
                     start = event['start'].get('dateTime', event['start'].get('date'))
                     end = event['end'].get('dateTime', event['end'].get('date'))
