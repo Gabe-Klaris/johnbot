@@ -189,8 +189,9 @@ async def quotes(ctx,arg):
                     end = end.replace("T", " ")
                     end = end[:-6]
                     end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
-                    calendar_events = "You have an event " + event['summary'] + "at" + datetime.datetime.strftime(start,"%I:%M") + "-" + datetime.datetime.strftime(end,"%I:%M %p") + "\n"
+                    calendar_events = "You have an event " + event['summary'] + " at " + datetime.datetime.strftime(start,"%I:%M") + "-" + datetime.datetime.strftime(end,"%I:%M %p") + "\n"
                     response += str(calendar_events)
+                return response
             response = dayschedule(events_result,events_result1,events_result2,response)
         except HttpError as error:
             print('An error occurred: %s' % error)
