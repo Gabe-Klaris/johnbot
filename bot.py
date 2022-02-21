@@ -129,6 +129,7 @@ async def quotes(ctx,arg):
                 events = events_result.get('items', [])
                 events1 = events_result1.get('items', [])
                 events2 = events_result2.get('items', [])
+                check = 0
                 for event in events1:
                     if "US Assembly" in event['summary']:
                         check = 1
