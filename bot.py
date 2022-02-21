@@ -50,7 +50,7 @@ async def quotes(ctx):
     response = random.choice(John_quotes)
     await ctx.send(response)
 
-@bot.command(name='schedule',help = 'coming soon to a John bot near you')
+@bot.command(name='schedule',help = 'evolution almost complete')
 async def quotes(ctx,arg):
     username = str(ctx.message.author.id)
     response = ""
@@ -88,7 +88,7 @@ async def quotes(ctx,arg):
         # Call the Calendar API
             today = datetime.datetime.now(datetime.timezone.utc).astimezone()
             today = today.replace(hour=0, minute=0, second=0, microsecond=0)
-            tomorrow = today + datetime.timedelta(days=1)
+            tomorrow = today + datetime.timedelta(days=3)
             tomorrow = tomorrow.isoformat()
             today = today.isoformat()
             now = datetime.datetime.now(datetime.timezone.utc).astimezone().isoformat()
