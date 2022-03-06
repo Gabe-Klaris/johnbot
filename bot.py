@@ -14,10 +14,154 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 bot = commands.Bot(command_prefix='.', description = "Hi :)")
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+#defining out of discord bot for use in functions
+
+def main(response,arg):
+        
+    """Shows basic usage of the Google Calendar API.
+    Prints the start and name of the next 10 events on the user's calendar.
+    """
+    creds = None
+# The file token.json stores the user's access and refresh tokens, and is
+# created automatically when the authorization flow completes for the first
+# time.
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+# If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+    # Save the credentials for the next run
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
+
+    try:
+        service = build('calendar', 'v3', credentials=creds)
+
+    #uses arg supplied with command to get schedule to specified day
+        advance = 0
+        if arg == 'today':
+            advance = 0
+        elif arg == "tomorrow":
+            advance = 1
+        elif arg.isdigit() == True:
+            advance = int(arg)
+        #sets day and day end for specified day to get events on that day
+        day = datetime.datetime.now(datetime.timezone.utc).astimezone()
+        day = day.replace(hour=0, minute=0, second=0, microsecond=0)
+        day = day + datetime.timedelta(days=advance)
+        dayend = day.replace(hour=23, minute=59, second=59, microsecond=0)
+        day = day.isoformat()
+        dayend = dayend.isoformat()
+        now = datetime.datetime.now(datetime.timezone.utc).astimezone()
+        #checking if user who gave the command is intended user
+        if response == "no" or response == "invalid input":
+            return response
+        #getting events
+        events_result = service.events().list(calendarId='u5va2sqv38sv6a3v700pou832jfcjv8i@import.calendar.google.com', timeMin=day,
+                                            timeMax = dayend, singleEvents=True,
+                                            orderBy='startTime', timeZone = 'EST').execute()
+        events_result1 = service.events().list(calendarId='npm38bcvh7rhs2pltu8p16ob7p5k71bj@import.calendar.google.com', timeMin=day,
+                                            timeMax = dayend, singleEvents=True,
+                                            orderBy='startTime', timeZone = 'EST').execute()
+        events_result2 = service.events().list(calendarId='gckyoshi@gmail.com', timeMin=day,
+                                            timeMax = dayend, singleEvents=True,
+                                            orderBy='startTime', timeZone = 'EST').execute()
+        #setting end of day for to only get free time within school day  
+        endOfDay = now.replace(hour=15, minute=15, second=0)
+        endOfDay = endOfDay + datetime.timedelta(days=advance)
+        #function that sorts the events to give result
+        def dayschedule(event_result,event_result1,event_result2,response,dayend):
+            events = events_result.get('items', [])
+            events1 = events_result1.get('items', [])
+            events2 = events_result2.get('items', [])
+            check = 0
+            sport = 0
+            #"if not events1" will be false even if there are events in it that don't take up my time (not assembly)
+            for event in events1:
+                if "US Assembly" in event['summary']:
+                    check = 1
+                else:
+                    check = 0
+            if not events and check == 0 and not events2:
+                response += 'free all day, go watch some anime\n'
+                return response
+            dayend = datetime.datetime.strftime(dayend,'%Y-%m-%d %H:%M:%S')
+            dayend = datetime.datetime.strptime(dayend,'%Y-%m-%d %H:%M:%S')
+            total_events = []
+            #grabs start and end time for all events
+            for event in events:
+                start = event['start'].get('dateTime', event['start'].get('date'))
+                print(start)
+                end = event['end'].get('dateTime', event['end'].get('date'))
+                if "Tennis" in event['summary']:
+                    sport = 1
+                start = start.replace("T", " ")
+                start = start[:-6]
+                start = datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S')
+                end = end.replace("T", " ")
+                end = end[:-6]
+                end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
+                total_events.append(start)
+                total_events.append(end)
+        #print(datetime.datetime.strftime(start,"%I:%M"), "-", datetime.datetime.strftime(end,"%I:%M"), event['summary'])
+            #grabs assembly because it's not in my schedule
+            for event in events1:
+                start = event['start'].get('dateTime', event['start'].get('date'))
+                end = event['end'].get('dateTime', event['end'].get('date'))
+                if "US Assembly" in event['summary']:
+                    start = start.replace("T", " ")
+                    start = start[:-6]
+                    start = datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S')
+                    end = end.replace("T", " ")
+                    end = end[:-6]
+                    end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
+                    total_events.append(start)
+                    total_events.append(end)
+                #print(datetime.datetime.strftime(start,"%I:%M"), "-", datetime.datetime.strftime(end,"%I:%M"), event['summary'])
+                else:
+                    hi = 1
+            #gets free time and adds to response
+            if len(total_events) != 0:
+                total_events.append(dayend)
+                total_events.append(dayend)
+                sorted_events = sorted(total_events)
+                if (sorted_events.index(dayend) != -1 and sorted_events.index(dayend) != -2):
+                    sorted_events = sorted_events[:-2]
+                for i in range(1,len(sorted_events)-1,2):
+                    if sorted_events[i] != sorted_events[i+1]:
+                        free = "You have free time from " + datetime.datetime.strftime(sorted_events[i] ,"%I:%M") + "-" + datetime.datetime.strftime(sorted_events[i+1] ,"%I:%M") + "\n"
+                        response += str(free)
+                if sport == 1:
+                    last_class = "And you have tennis until 5:45\n"
+                    response += str(last_class)
+            #gets other events and adds to calendar
+            for event in events2:
+                start = event['start'].get('dateTime', event['start'].get('date'))
+                print(start)
+                end = event['end'].get('dateTime', event['end'].get('date'))
+                start = start.replace("T", " ")
+                start = start[:-6]
+                start = datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S')
+                end = end.replace("T", " ")
+                end = end[:-6]
+                end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
+                calendar_events = "You have an event " + event['summary'] + " at " + datetime.datetime.strftime(start,"%I:%M") + "-" + datetime.datetime.strftime(end,"%I:%M %p") + "\n"
+                response += str(calendar_events)
+            return response
+        response = dayschedule(events_result,events_result1,events_result2,response,endOfDay)
+    except HttpError as error:
+        print('An error occurred: %s' % error)
+    print(response)
+    return response
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name="Colossal Cave Adventure"))
-
 
 
             
@@ -50,158 +194,24 @@ async def quotes(ctx):
     response = random.choice(John_quotes)
     await ctx.send(response)
 
-@bot.command(name='schedule',help = 'evolution almost complete')
+@bot.command(name='schedule',help = 'coming soon to a John bot near you')
 async def quotes(ctx,arg):
     username = str(ctx.message.author.id)
     response = ""
     arg = arg.lower()
     if username == os.environ['DISCORD_ID']:
-        response = arg + "'s breakdown is:\n"
+        if arg == '0' or arg == "today":
+            response = "today's breakdown is:\n"
+        elif arg == '1' or arg == "tomorrow":
+            response = "tomorrow's breakdown is:\n"
+        elif arg.isdigit():
+            response = "The breakdown in " + arg + " days is: \n"
+        else:
+            response = "invalid input"
     else:
         response = "no\n"
-    def main(response,arg):
-        
-        """Shows basic usage of the Google Calendar API.
-        Prints the start and name of the next 10 events on the user's calendar.
-        """
-        creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-        if os.path.exists('token.json'):
-            creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', SCOPES)
-                creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-            with open('token.json', 'w') as token:
-                token.write(creds.to_json())
-
-        try:
-            service = build('calendar', 'v3', credentials=creds)
-
-        # Call the Calendar API
-            today = datetime.datetime.now(datetime.timezone.utc).astimezone()
-            today = today.replace(hour=0, minute=0, second=0, microsecond=0)
-            tomorrow = today + datetime.timedelta(days=3)
-            tomorrow = tomorrow.isoformat()
-            today = today.isoformat()
-            now = datetime.datetime.now(datetime.timezone.utc).astimezone().isoformat()
-            todayend = datetime.datetime.now(datetime.timezone.utc).astimezone()
-            todayend = todayend.replace(hour=23, minute=59, second=59, microsecond=0)
-            tomorrowend = todayend + datetime.timedelta(days=1)
-            tomorrowend = tomorrowend.isoformat()
-            todayend = todayend.isoformat()
-            #print('Getting the upcoming 10 events')
-            if response == "no":
-                return response
-            if arg == 'today':
-                events_result = service.events().list(calendarId='u5va2sqv38sv6a3v700pou832jfcjv8i@import.calendar.google.com', timeMin=today,
-                                                    timeMax = todayend, singleEvents=True,
-                                                    orderBy='startTime', timeZone = 'EST').execute()
-                events_result1 = service.events().list(calendarId='npm38bcvh7rhs2pltu8p16ob7p5k71bj@import.calendar.google.com', timeMin=today,
-                                                    timeMax = todayend, singleEvents=True,
-                                                    orderBy='startTime', timeZone = 'EST').execute()
-                events_result2 = service.events().list(calendarId='gckyoshi@gmail.com', timeMin=today,
-                                                    timeMax = todayend, singleEvents=True,
-                                                    orderBy='startTime', timeZone = 'EST').execute()
-                events = events_result.get('items', [])
-                events1 = events_result1.get('items', [])
-                events2 = events_result2.get('items', [])
-            elif arg == 'tomorrow':
-                events_result = service.events().list(calendarId='u5va2sqv38sv6a3v700pou832jfcjv8i@import.calendar.google.com', timeMin=tomorrow,
-                                                    timeMax = tomorrowend, singleEvents=True,
-                                                    orderBy='startTime', timeZone = 'EST').execute()
-                events_result1 = service.events().list(calendarId='npm38bcvh7rhs2pltu8p16ob7p5k71bj@import.calendar.google.com', timeMin=tomorrow,
-                                                    timeMax = tomorrowend, singleEvents=True,
-                                                    orderBy='startTime', timeZone = 'EST').execute()
-                events_result2 = service.events().list(calendarId='gckyoshi@gmail.com', timeMin=tomorrow,
-                                                    timeMax = tomorrowend, singleEvents=True,
-                                                    orderBy='startTime', timeZone = 'EST').execute()
-            else:
-                return "not valid argument"
-            def dayschedule(event_result,event_result1,event_result2,response):
-                events = events_result.get('items', [])
-                events1 = events_result1.get('items', [])
-                events2 = events_result2.get('items', [])
-                check = 0
-                for event in events1:
-                    if "US Assembly" in event['summary']:
-                        check = 1
-                    else:
-                        check = 0
-                if not events and check == 0 and not events2:
-                    response += 'free all day, go watch some anime\n'
-                    return response
-        # Prints the start and name of the next 10 events
-                total_events = []
-                for event in events:
-                    start = event['start'].get('dateTime', event['start'].get('date'))
-                    end = event['end'].get('dateTime', event['end'].get('date'))
-                    start = start.replace("T", " ")
-                    start = start[:-6]
-                    start = datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S')
-                    end = end.replace("T", " ")
-                    end = end[:-6]
-                    end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
-                    total_events.append(start)
-                    total_events.append(end)
-            #print(datetime.datetime.strftime(start,"%I:%M"), "-", datetime.datetime.strftime(end,"%I:%M"), event['summary'])
-            
-            
-            #if start and end date are equal no free time
-            #if not equal then free time
-                for event in events1:
-                    start = event['start'].get('dateTime', event['start'].get('date'))
-                    end = event['end'].get('dateTime', event['end'].get('date'))
-                    if "US Assembly" in event['summary']:
-                    #print(start, "-", end, event['summary'])
-                        start = start.replace("T", " ")
-                        start = start[:-6]
-                        start = datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S')
-                        end = end.replace("T", " ")
-                        end = end[:-6]
-                        end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
-                        total_events.append(start)
-                        total_events.append(end)
-                    #print(datetime.datetime.strftime(start,"%I:%M"), "-", datetime.datetime.strftime(end,"%I:%M"), event['summary'])
-            
-                    else:
-                        hi = 1
-                if len(total_events) != 0:
-                    sorted_events = sorted(total_events)
-                    for i in range(1,len(sorted_events)-1,2):
-                        if sorted_events[i] != sorted_events[i+1]:
-                            free = "You have free time from " + datetime.datetime.strftime(sorted_events[i] ,"%I:%M") + "-" + datetime.datetime.strftime(sorted_events[i+1] ,"%I:%M") + "\n"
-                            response += str(free)
-                    last_class = "and your last class ends at " + datetime.datetime.strftime(sorted_events[-1] ,"%I:%M") + "\n"
-                    response += str(last_class)
-                for event in events2:
-                    start = event['start'].get('dateTime', event['start'].get('date'))
-                    end = event['end'].get('dateTime', event['end'].get('date'))
-                    start = start.replace("T", " ")
-                    start = start[:-6]
-                    start = datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S')
-                    end = end.replace("T", " ")
-                    end = end[:-6]
-                    end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
-                    calendar_events = "You have an event " + event['summary'] + " at " + datetime.datetime.strftime(start,"%I:%M") + "-" + datetime.datetime.strftime(end,"%I:%M %p") + "\n"
-                    response += str(calendar_events)
-                return response
-            response = dayschedule(events_result,events_result1,events_result2,response)
-        except HttpError as error:
-            print('An error occurred: %s' % error)
-        print(response)
-        return response
-
     if __name__ == '__main__':
         message = main(response,arg)
         await ctx.send(message)
 #to update do git add . then git commit -m "message" then git push
-
 bot.run(os.environ['DISCORD_TOKEN'])
