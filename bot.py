@@ -194,8 +194,8 @@ async def quotes(ctx):
     response = random.choice(John_quotes)
     await ctx.send(response)
 
-@bot.command(name='schedule',help =""".schedule + x:
- Gets free time x days in the future.
+@bot.command(name='schedule',help ="""Gets free time for a day in the future
+ Usage: ".schedule x" where x is how manys in the future you want your free time for
   You can use today or tomorrow instead of 0 and 1 respectively.""")
 async def quotes(ctx,arg):
     username = str(ctx.message.author.id)
