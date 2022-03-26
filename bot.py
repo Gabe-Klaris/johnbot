@@ -6,7 +6,10 @@ import os
 from discord.ext import commands
 import datetime
 import os.path
-
+import time
+import asyncio
+import pytz
+from datetime import datetime, time, timedelta
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -14,7 +17,10 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 bot = commands.Bot(command_prefix='.', description = "Hi :)")
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+WHEN = time(17, 10, 0)  # 6:00 PM
+tz = pytz.timezone('EST')
+channel_id = 957382034744033361
+guild_id = 724158861979942922
 #defining out of discord bot for use in functions
 
 def main(response,arg):
@@ -163,7 +169,33 @@ def main(response,arg):
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name="Colossal Cave Adventure"))
 
+async def called_once_a_day():  # Fired every day
+    print("lkshfds")
+    await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
+    channel = bot.get_guild(guild_id).get_channel(channel_id) # Note: It's more efficient to do bot.get_guild(guild_id).get_channel(channel_id) as there's less looping involved, but just get_channel still works fine
+    print(channel)
+    await channel.send("your message here")
 
+async def background_task():
+    now = datetime.now(tz)
+    now = now.replace(tzinfo=None)
+    print(now)
+    if now.time() > WHEN:  # Make sure loop doesn't start after {WHEN} as then it will send immediately the first time as negative seconds will make the sleep yield instantly
+        print("hello")
+        tomorrow = datetime.combine(now.date() + timedelta(days=1), time(0))
+        seconds = (tomorrow - now).total_seconds()  # Seconds until tomorrow (midnight)
+        await asyncio.sleep(seconds)   # Sleep until tomorrow and then the loop will start 
+    while True:
+        now = datetime.now(tz)
+        now = now.replace(tzinfo=None)
+        target_time = datetime.combine(now.date(), WHEN)  
+        seconds_until_target = (target_time - now).total_seconds()
+        print(seconds_until_target)
+        await asyncio.sleep(seconds_until_target)  # Sleep until we hit the target time
+        await called_once_a_day()  # Call the helper function that sends the message
+        tomorrow = datetime.combine(now.date() + timedelta(days=1), time(0))
+        seconds = (tomorrow - now).total_seconds()  # Seconds until tomorrow (midnight)
+        await asyncio.sleep(seconds)
             
 @bot.command(name='quote',help = 'gives John quote')
 async def quotes(ctx):
@@ -216,4 +248,6 @@ async def quotes(ctx,arg):
         message = main(response,arg)
         await ctx.send(message)
 #to update do git add . then git commit -m "message" then git push
-bot.run(os.environ['DISCORD_TOKEN'])
+if __name__ == '__main__':
+    bot.loop.create_task(background_task())
+    bot.run(os.environ['DISCORD_TOKEN'])
