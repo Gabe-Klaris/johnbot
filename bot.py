@@ -17,7 +17,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 bot = commands.Bot(command_prefix='.', description = "Hi :)")
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
-WHEN = time(17, 10, 0)  # 6:00 PM
+WHEN = time(8, 0, 0)  # 8:00 AM
 tz = pytz.timezone('EST')
 channel_id = 957382034744033361
 guild_id = 724158861979942922
@@ -134,9 +134,19 @@ def main(response,arg):
                     hi = 1
             #gets free time and adds to response
             if len(total_events) != 0:
-                total_events.append(dayend)
-                total_events.append(dayend)
-                sorted_events = sorted(total_events)
+                sorted_events = []
+                check = datetime.datetime.strftime(dayend, '%m-%d')
+                check = datetime.datetime.strptime(check,'%m-%d')
+                saving_start = '03-13'
+                savings_end = "11-6"
+                savings_start = datetime.datetime.strptime(saving_start,'%m-%d')
+                savings_end = datetime.datetime.strptime(savings_end,'%m-%d')
+                if (savings_start < check and check < savings_end):
+                    for i in total_events:
+                        sorted_events.append(i +datetime.timedelta(hours = +1))
+                sorted_events.append(dayend)
+                sorted_events.append(dayend)
+                sorted_events = sorted(sorted_events)
                 if (sorted_events.index(dayend) != -1 and sorted_events.index(dayend) != -2):
                     sorted_events = sorted_events[:-2]
                 for i in range(1,len(sorted_events)-1,2):
@@ -174,26 +184,26 @@ async def called_once_a_day():  # Fired every day
     await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
     channel = bot.get_guild(guild_id).get_channel(channel_id) # Note: It's more efficient to do bot.get_guild(guild_id).get_channel(channel_id) as there's less looping involved, but just get_channel still works fine
     print(channel)
-    await channel.send("your message here")
+    await channel.send(main("today's breakdown is:\n","today"))
 
 async def background_task():
-    now = datetime.now(tz)
+    now = datetime.datetime.now(tz)
     now = now.replace(tzinfo=None)
     print(now)
     if now.time() > WHEN:  # Make sure loop doesn't start after {WHEN} as then it will send immediately the first time as negative seconds will make the sleep yield instantly
         print("hello")
-        tomorrow = datetime.combine(now.date() + timedelta(days=1), time(0))
+        tomorrow = datetime.datetime.combine(now.date() + datetime.timedelta(days=1), datetime.time(0))
         seconds = (tomorrow - now).total_seconds()  # Seconds until tomorrow (midnight)
         await asyncio.sleep(seconds)   # Sleep until tomorrow and then the loop will start 
     while True:
-        now = datetime.now(tz)
+        now = datetime.datetime.now(tz)
         now = now.replace(tzinfo=None)
-        target_time = datetime.combine(now.date(), WHEN)  
+        target_time = datetime.datetime.combine(now.date(), WHEN)  
         seconds_until_target = (target_time - now).total_seconds()
         print(seconds_until_target)
         await asyncio.sleep(seconds_until_target)  # Sleep until we hit the target time
         await called_once_a_day()  # Call the helper function that sends the message
-        tomorrow = datetime.combine(now.date() + timedelta(days=1), time(0))
+        tomorrow = datetime.datetime.combine(now.date() + datetime.timedelta(days=1), datetime.time(0))
         seconds = (tomorrow - now).total_seconds()  # Seconds until tomorrow (midnight)
         await asyncio.sleep(seconds)
             
