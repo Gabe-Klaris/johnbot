@@ -17,7 +17,7 @@ from googleapiclient.errors import HttpError
 bot = commands.Bot(command_prefix='.', description = "Hi :)")
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 WHEN = datetime.time(8, 0, 0)  # 8:00 AM
-tz = pytz.timezone('EST')
+tz = pytz.timezone('US/Eastern')
 channel_id = 957382034744033361
 guild_id = 724158861979942922
 #defining out of discord bot for use in functions
