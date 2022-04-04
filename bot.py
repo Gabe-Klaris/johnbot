@@ -149,7 +149,7 @@ def main(response,arg):
                 if (sorted_events.index(dayend) != -1 and sorted_events.index(dayend) != -2):
                     sorted_events = sorted_events[:-2]
                 for i in range(1,len(sorted_events)-1,2):
-                    if sorted_events[i] != sorted_events[i+1]:
+                    if sorted_events[i] != sorted_events[i+1] and sorted_events[i] != sorted_events[i-1]:
                         free = "You have free time from " + datetime.datetime.strftime(sorted_events[i] ,"%I:%M") + "-" + datetime.datetime.strftime(sorted_events[i+1] ,"%I:%M") + "\n"
                         response += str(free)
                 if sport == 1:
