@@ -57,13 +57,13 @@ def main(response,arg):
         elif arg.isdigit() == True:
             advance = int(arg)
         #sets day and day end for specified day to get events on that day
-        day = datetime.datetime.now(datetime.timezone.utc).astimezone()
+        day = datetime.datetime.now(tz)
         day = day.replace(hour=0, minute=0, second=0, microsecond=0)
         day = day + datetime.timedelta(days=advance)
         dayend = day.replace(hour=23, minute=59, second=59, microsecond=0)
         day = day.isoformat()
         dayend = dayend.isoformat()
-        now = datetime.datetime.now(datetime.timezone.utc).astimezone()
+        now = datetime.datetime.now(tz)
         #checking if user who gave the command is intended user
         if response == "no" or response == "invalid input":
             return response
