@@ -236,7 +236,10 @@ async def quotes(ctx,arg):
         elif arg == '1' or arg == "tomorrow":
             response = "tomorrow's breakdown is:\n"
         elif arg.isdigit():
-            response = "The breakdown in " + arg + " days is: \n"
+            day = datetime.datetime.now(datetime.timezone.utc).astimezone()
+            day = day.replace(hour=0, minute=0, second=0, microsecond=0)
+            day = day + datetime.timedelta(days=int(arg))
+            response = "The breakdown on " +  datetime.datetime.strftime(day ,'%A') + ", " + datetime.datetime.strftime(day,'%m/%d') + ": \n"
         else:
             response = "invalid input"
     else:
