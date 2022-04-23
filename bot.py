@@ -136,10 +136,26 @@ def main(response,arg):
                 sorted_events = sorted(sorted_events)
                 if (sorted_events.index(dayend) != -1 and sorted_events.index(dayend) != -2):
                     sorted_events = sorted_events[:-2]
+                first_period =  datetime.datetime.strftime(sorted_events[0] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[1] ,"%I:%M") + " " + events[0]['summary'] + '\n'
+                response += str(first_period)
+                z = 1
+                x= 2
+                print(sorted_events)
                 for i in range(1,len(sorted_events)-1,2):
+                    print(sorted_events[i], sorted_events[i+1])
                     if sorted_events[i] != sorted_events[i+1] and sorted_events[i] != sorted_events[i-1]:
-                        free = "You have free time from " + datetime.datetime.strftime(sorted_events[i] ,"%I:%M") + "-" + datetime.datetime.strftime(sorted_events[i+1] ,"%I:%M") + "\n"
+                        free = datetime.datetime.strftime(sorted_events[i] ,"%I:%M") + " - " + datetime.datetime.strftime(sorted_events[i+1] ,"%I:%M") + " **Free Period**" + "\n"
                         response += str(free)
+                        if datetime.datetime.strftime(sorted_events[x] ,"%I:%M") != "03:15":
+                            class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + events[z]['summary'] + '\n'
+                            z += 1
+                            x += 2
+                            response += str(class_event)
+                    elif datetime.datetime.strftime(sorted_events[x] ,"%I:%M") != "03:15":
+                        class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + events[z]['summary'] + '\n'
+                        z += 1
+                        x += 2
+                        response += str(class_event)
                 if sport == 1:
                     last_class = "And you have tennis until 5:45\n"
                     response += str(last_class)
@@ -236,7 +252,8 @@ async def quotes(ctx,arg):
         elif arg == '1' or arg == "tomorrow":
             response = "tomorrow's breakdown is:\n"
         elif arg.isdigit():
-            day = datetime.datetime.now(datetime.timezone.utc).astimezone()
+            day = datetime.datetime.now(tz)
+            
             day = day.replace(hour=0, minute=0, second=0, microsecond=0)
             day = day + datetime.timedelta(days=int(arg))
             response = "The breakdown on " +  datetime.datetime.strftime(day ,'%A') + ", " + datetime.datetime.strftime(day,'%m/%d') + ": \n"
