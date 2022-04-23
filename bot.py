@@ -21,7 +21,6 @@ tz = pytz.timezone('US/Eastern')
 channel_id = 957382034744033361
 guild_id = 724158861979942922
 #defining out of discord bot for use in functions
-
 def main(response,arg):
         
     """Shows basic usage of the Google Calendar API.
@@ -31,19 +30,8 @@ def main(response,arg):
 # The file token.json stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-# If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-    # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
+    creds_json = os.environ['GOOGLE_APPLICATION_CREDENTIALS']
+    creds = Credentials.from_authorized_user_info(creds_json, SCOPES)
 
     try:
         service = build('calendar', 'v3', credentials=creds)
