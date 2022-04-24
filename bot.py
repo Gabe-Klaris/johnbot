@@ -8,6 +8,7 @@ import datetime
 import os.path
 import time
 import asyncio
+import json
 import pytz
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -31,7 +32,8 @@ def main(response,arg):
 # created automatically when the authorization flow completes for the first
 # time.
     creds_json = os.environ['GOOGLE_APPLICATION_CREDENTIALS']
-    creds = Credentials.from_authorized_user_info(creds_json, SCOPES)
+    alright = json.loads(creds_json)
+    creds = Credentials.from_authorized_user_info(alright,SCOPES)
 
     try:
         service = build('calendar', 'v3', credentials=creds)
