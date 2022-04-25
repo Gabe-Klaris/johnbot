@@ -37,7 +37,6 @@ def main(response,arg):
 
     try:
         service = build('calendar', 'v3', credentials=creds)
-
     #uses arg supplied with command to get schedule to specified day
         advance = 0
         if arg == 'today':
@@ -262,7 +261,7 @@ async def quotes(ctx,arg):
         else:
             response = "invalid input"
     else:
-        response = "no\n"
+        response = "no"
     if __name__ == '__main__':
         message = main(response,arg)
         await ctx.send(message)
