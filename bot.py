@@ -262,7 +262,7 @@ async def quotes(ctx,arg):
         else:
             response = "invalid input"
     else:
-        response = "no\n"
+        response = "no"
     if __name__ == '__main__':
         message = main(response,arg)
         await ctx.send(message)
