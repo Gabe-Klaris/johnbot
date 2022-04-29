@@ -155,7 +155,7 @@ def main(response,arg):
                         free = datetime.datetime.strftime(sorted_events[i] ,"%I:%M") + " - " + datetime.datetime.strftime(sorted_events[i+1] ,"%I:%M") + " **Free Period**" + "\n"
                         response += str(free)
                         if datetime.datetime.strftime(sorted_events[x] ,"%I:%M") != "03:15":
-                            if datetime.datetime.strftime(sorted_events[x] ,"%I:%M:%A") != "10:10:Friday":
+                            if datetime.datetime.strftime(sorted_events[x] ,"%I:%M:%A") != "10:10:Friday":#assemly in different calendar so needed manual adding
                                 class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + events[z]['summary'] + '\n'
                                 z += 1
                             else: 
@@ -178,14 +178,18 @@ def main(response,arg):
                 start = event['start'].get('dateTime', event['start'].get('date'))
                 print(start)
                 end = event['end'].get('dateTime', event['end'].get('date'))
-                start = start.replace("T", " ")
-                start = start[:-6]
-                start = datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S')
-                end = end.replace("T", " ")
-                end = end[:-6]
-                end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
-                calendar_events = "You have an event " + event['summary'] + " at " + datetime.datetime.strftime(start,"%I:%M") + "-" + datetime.datetime.strftime(end,"%I:%M %p") + "\n"
-                response += str(calendar_events)
+                if "T" in start and start != end:
+                    start = start.replace("T", " ")
+                    start = start[:-6]
+                    start = datetime.datetime.strptime(start,'%Y-%m-%d %H:%M:%S')
+                    end = end.replace("T", " ")
+                    end = end[:-6]
+                    end = datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
+                    calendar_events = "You have an event " + event['summary'] + " at " + datetime.datetime.strftime(start,"%I:%M") + "-" + datetime.datetime.strftime(end,"%I:%M %p") + "\n"
+                    response += str(calendar_events)
+                #for all day events
+                else:
+                    response = "**" + event['summary'] + "**" + "\n" + response
             return response
         response = dayschedule(events_result,events_result1,events_result2,response,endOfDay)
     except HttpError as error:
