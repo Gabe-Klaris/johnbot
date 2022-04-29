@@ -134,6 +134,7 @@ def main(response,arg):
                         sorted_events.append(i +datetime.timedelta(hours = +1))
                 sorted_events.append(dayend)
                 sorted_events.append(dayend)
+                #adding start of day var
                 if datetime.datetime.strftime(dayend ,"%A") == "Wednesday":
                     daystart = dayend
                     daystart1 = daystart
@@ -150,20 +151,25 @@ def main(response,arg):
                 x= 2
                 print(sorted_events)
                 for i in range(1,len(sorted_events)-1,2):
-                    print(sorted_events[i], sorted_events[i+1])
                     if sorted_events[i] != sorted_events[i+1] and sorted_events[i] != sorted_events[i-1]:
                         free = datetime.datetime.strftime(sorted_events[i] ,"%I:%M") + " - " + datetime.datetime.strftime(sorted_events[i+1] ,"%I:%M") + " **Free Period**" + "\n"
                         response += str(free)
                         if datetime.datetime.strftime(sorted_events[x] ,"%I:%M") != "03:15":
-                            class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + events[z]['summary'] + '\n'
-                            z += 1
+                            if datetime.datetime.strftime(sorted_events[x] ,"%I:%M:%A") != "10:10:Friday":
+                                class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + events[z]['summary'] + '\n'
+                                z += 1
+                            else: 
+                                class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + "US Assembly" + '\n' 
                             x += 2
                             response += str(class_event)
                     elif datetime.datetime.strftime(sorted_events[x] ,"%I:%M") != "03:15":
-                        class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + events[z]['summary'] + '\n'
-                        z += 1
-                        x += 2
-                        response += str(class_event)
+                            if datetime.datetime.strftime(sorted_events[x] ,"%I:%M:%A") != "10:10:Friday":
+                                class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + events[z]['summary'] + '\n'
+                                z += 1
+                            else: 
+                                class_event = datetime.datetime.strftime(sorted_events[x] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[x+1] ,"%I:%M") + " " + "US Assembly" + '\n' 
+                            x += 2
+                            response += str(class_event)
                 if sport == 1:
                     last_class = "And you have tennis until 5:45\n"
                     response += str(last_class)
