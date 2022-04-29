@@ -134,6 +134,13 @@ def main(response,arg):
                         sorted_events.append(i +datetime.timedelta(hours = +1))
                 sorted_events.append(dayend)
                 sorted_events.append(dayend)
+                if datetime.datetime.strftime(dayend ,"%A") == "Wednesday":
+                    daystart = dayend
+                    daystart1 = daystart
+                    daystart = daystart.replace(hour=9, minute=10, second=0, microsecond=0)
+                    daystart1 = daystart1.replace(hour=9, minute=9, second=0, microsecond=0)
+                    sorted_events.append(daystart)
+                    sorted_events.append(daystart1)
                 sorted_events = sorted(sorted_events)
                 if (sorted_events.index(dayend) != -1 and sorted_events.index(dayend) != -2):
                     sorted_events = sorted_events[:-2]
