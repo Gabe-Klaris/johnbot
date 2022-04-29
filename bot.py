@@ -145,9 +145,12 @@ def main(response,arg):
                 sorted_events = sorted(sorted_events)
                 if (sorted_events.index(dayend) != -1 and sorted_events.index(dayend) != -2):
                     sorted_events = sorted_events[:-2]
-                first_period =  datetime.datetime.strftime(sorted_events[0] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[1] ,"%I:%M") + " " + events[0]['summary'] + '\n'
-                response += str(first_period)
-                z = 1
+                if datetime.datetime.strftime(dayend ,"%A") != "Wednesday":
+                    first_period =  datetime.datetime.strftime(sorted_events[0] ,"%I:%M") + " - " +  datetime.datetime.strftime(sorted_events[1] ,"%I:%M") + " " + events[0]['summary'] + '\n'
+                    response += str(first_period)
+                    z = 1
+                else:
+                    z = 0
                 x= 2
                 print(sorted_events)
                 for i in range(1,len(sorted_events)-1,2):
