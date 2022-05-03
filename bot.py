@@ -19,8 +19,10 @@ bot = commands.Bot(command_prefix='.', description = "Hi :)")
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 WHEN = datetime.time(8, 0, 0)  # 8:00 AM
 tz = pytz.timezone('US/Eastern')
-channel_id = 957382034744033361
-guild_id = 724158861979942922
+#server you want to send daily message
+guild_id = os.environ['guild_id']
+#channel you want to send message in
+channel_id = os.environ['channel_id']
 #defining out of discord bot for use in functions
 def main(response,arg):
         
@@ -57,13 +59,13 @@ def main(response,arg):
         if response == "no" or response == "invalid input":
             return response
         #getting events
-        events_result = service.events().list(calendarId='u5va2sqv38sv6a3v700pou832jfcjv8i@import.calendar.google.com', timeMin=day,
+        events_result = service.events().list(calendarId=os.environ['classes_schedule_id'], timeMin=day,
                                             timeMax = dayend, singleEvents=True,
                                             orderBy='startTime', timeZone = 'EST').execute()
-        events_result1 = service.events().list(calendarId='npm38bcvh7rhs2pltu8p16ob7p5k71bj@import.calendar.google.com', timeMin=day,
+        events_result1 = service.events().list(calendarId=os.environ['veracross_school_schedule_id'], timeMin=day,
                                             timeMax = dayend, singleEvents=True,
                                             orderBy='startTime', timeZone = 'EST').execute()
-        events_result2 = service.events().list(calendarId='gckyoshi@gmail.com', timeMin=day,
+        events_result2 = service.events().list(calendarId=os.environ['calendar_email'], timeMin=day,
                                             timeMax = dayend, singleEvents=True,
                                             orderBy='startTime', timeZone = 'EST').execute()
         #setting end of day for to only get free time within school day  
@@ -204,7 +206,6 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name="Colossal Cave Adventure"))
 
 async def called_once_a_day():  # Fired every day
-    print("lkshfds")
     await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
     channel = bot.get_guild(guild_id).get_channel(channel_id) # Note: It's more efficient to do bot.get_guild(guild_id).get_channel(channel_id) as there's less looping involved, but just get_channel still works fine
     print(channel)
