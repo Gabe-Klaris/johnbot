@@ -20,9 +20,9 @@ SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 WHEN = datetime.time(8, 0, 0)  # 8:00 AM
 tz = pytz.timezone('US/Eastern')
 #server you want to send daily message
-guild_id = os.environ['guild_id']
+guild_id = int(os.environ['guild_id'])
 #channel you want to send message in
-channel_id = os.environ['channel_id']
+channel_id = int(os.environ['channel_id'])
 #defining out of discord bot for use in functions
 def main(response,arg):
         
