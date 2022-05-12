@@ -10,8 +10,8 @@
 
 #Requirements for bot: github account and git, heroku account, discord account and bot, pip and python downloaded on computer
 
-#Step 1: Download your "my schedule" and "school schedule" from the calendars and events tab on veracross <br/ >
-#make sure you download these to your personal email calendar and not your school email<br/ > 
+#Step 1: Download your "my schedule" and "school schedule" from the calendars and events tab on veracross.              
+#Make sure you download these to your personal email calendar and not your school email.   
 
 
 #Step2: Clone this repo using git clone https://github.com/Tubby101/johnbot <br />
