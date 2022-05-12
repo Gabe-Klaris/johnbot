@@ -39,7 +39,7 @@
 #Step 6: For the last step we need to generate the token to link to your calendar <br />
 #first download the google api library using this command in your terminal "pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib"<br />
 #Now run the quickstart.py file using the command "python quickstart.py"<br />
-#If either of these dont work, make sure you have everything install correctly<br />
+#If either of these dont work, make sure you have everything installed correctly and you are in the folder with quickstart.py<br />
 #Log into the google account you saved the calendars on, and accept the authorization(basically you are using the connection to google calendar I set up instead of setting one up on your own, It doesn't give me access to anything).<br />
 #Once the authoirzation for the app is finished, the file "token.json" should have been created in the folder you ran quickstart.py in <br />
 #copy the contents of the file into heroku config vars with the key "GOOGLE_APPLICATION_CREDENTIALS".<br />
