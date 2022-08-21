@@ -67,7 +67,7 @@ def main(response,arg):
                                             orderBy='startTime', timeZone = 'EST').execute()
         events_result2 = service.events().list(calendarId=os.environ['calendar_email'], timeMin=day,
                                             timeMax = dayend, singleEvents=True,
-                                            orderBy='startTime', timeZone = 'EST').execute()
+                                            orderBy='startTime').execute()
         #setting end of day for to only get free time within school day  
         endOfDay = now.replace(hour=15, minute=15, second=0)
         endOfDay = endOfDay + datetime.timedelta(days=advance)

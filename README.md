@@ -6,7 +6,7 @@
 #:) :( <br />
 
 
-
+#note: this is only for gfs schedule<br />
 
 #Requirements for bot: github account and git, heroku account, discord account and bot, pip and python downloaded on computer
 
