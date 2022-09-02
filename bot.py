@@ -61,10 +61,10 @@ def main(response,arg):
         #getting events
         events_result = service.events().list(calendarId=os.environ['classes_schedule_id'], timeMin=day,
                                             timeMax = dayend, singleEvents=True,
-                                            orderBy='startTime', timeZone = 'EST').execute()
+                                            orderBy='startTime').execute()
         events_result1 = service.events().list(calendarId=os.environ['veracross_school_schedule_id'], timeMin=day,
                                             timeMax = dayend, singleEvents=True,
-                                            orderBy='startTime', timeZone = 'EST').execute()
+                                            orderBy='startTime').execute()
         events_result2 = service.events().list(calendarId=os.environ['calendar_email'], timeMin=day,
                                             timeMax = dayend, singleEvents=True,
                                             orderBy='startTime').execute()
