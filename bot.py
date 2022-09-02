@@ -20,6 +20,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 WHEN = datetime.time(8, 0, 0)  # 8:00 AM
 tz = pytz.timezone('US/Eastern')
 #server you want to send daily message
+#copy will be made for tufts
 guild_id = int(os.environ['guild_id'])
 #channel you want to send message in
 channel_id = int(os.environ['channel_id'])
