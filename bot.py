@@ -15,7 +15,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-bot = commands.Bot(command_prefix='.', description = "Hi :)")
+bot = commands.Bot(command_prefix='.', description = "Hi :)", intents = "messages")
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 WHEN = datetime.time(8, 0, 0)  # 8:00 AM
 tz = pytz.timezone('US/Eastern')
