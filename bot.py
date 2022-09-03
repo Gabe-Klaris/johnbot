@@ -16,7 +16,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 #new add idk
-intents = discord.Intents.default()
+intents = discord.Intents(messages=True, guilds=True)
 bot = commands.Bot(command_prefix='.', description = "Hi :)", intents = intents)
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 WHEN = datetime.time(8, 0, 0)  # 8:00 AM
