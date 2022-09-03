@@ -290,9 +290,9 @@ async def quotes(ctx,arg):
         message = main(response,arg)
         await ctx.send(message)
 #to update do git add . then git commit -m "message" then git push
-async def main():
+async def main2():
     async with bot:
         bot.loop.create_task(background_task())
         await bot.start(os.environ['DISCORD_TOKEN'])
 
-asyncio.run(main())
+asyncio.run(main2())
