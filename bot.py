@@ -16,8 +16,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 #new add idk
-intents = discord.Intents.default()
-intents.members = True
+intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='.', description = "Hi :)", intents = intents)
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 WHEN = datetime.time(8, 0, 0)  # 8:00 AM
@@ -291,9 +290,8 @@ async def quotes(ctx,arg):
         message = main(response,arg)
         await ctx.send(message)
 #to update do git add . then git commit -m "message" then git push
-if __name__ == '__main__':
-    async def main2():
-        async with bot:
-            bot.loop.create_task(background_task())
-            await bot.start(os.environ['DISCORD_TOKEN'])
-    asyncio.run(main2())
+async def main2():
+    async with bot:
+        bot.loop.create_task(background_task())
+        await bot.start(os.environ['DISCORD_TOKEN'])
+asyncio.run(main2())
